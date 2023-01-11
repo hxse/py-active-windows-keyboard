@@ -1,4 +1,6 @@
 # py-active-windows-keyboard
+  * download https://github.com/libusb/hidapi/releases
+  * add path: `ctypes.CDLL(r"C:\Users\hxse\Downloads\hidapi.dll")`
   * create config.json
   *
     ```
