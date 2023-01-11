@@ -67,6 +67,18 @@ def send_device(sendList, keyboard):
     print("device closed")
 
 
+def show_device_list():
+    for device in hid.enumerate():
+        print(
+            f"product_string: {device['product_string']}\n"
+            f"manufacturer_string: {device['manufacturer_string']}\n"
+            f"vendor_id: {device['vendor_id']}\n"
+            f"product_id: {device['product_id']}\n"
+            f"usage_page: {device['usage_page']}\n"
+            f"usage: {device['usage']}\n"
+        )
+
+
 def args(
     sendList,
     vid,
@@ -76,6 +88,7 @@ def args(
     dllPath,
     EP_SIZE=32,
     sleepTime=0.2,
+    device_list=None,
 ):
     main(
         sendList,
@@ -86,10 +99,11 @@ def args(
         dllPath,
         EP_SIZE,
         sleepTime,
+        device_list,
     )
 
 
-def config(configPath):
+def config(configPath, device_list=None):
     config = get_config(configPath)
     main(
         config["sendList"],
@@ -100,18 +114,12 @@ def config(configPath):
         config["dllPath"],
         config["EP_SIZE"],
         config["sleepTime"],
+        device_list,
     )
 
 
 def main(
-    sendList,
-    vid,
-    pid,
-    usage_page,
-    usage_id,
-    dllPath,
-    _EP_SIZE,
-    _sleepTime,
+    sendList, vid, pid, usage_page, usage_id, dllPath, _EP_SIZE, _sleepTime, device_list
 ):
 
     global hid, EP_SIZE, sleepTime
@@ -121,6 +129,10 @@ def main(
     hid = _hid
     EP_SIZE = _EP_SIZE
     sleepTime = _sleepTime
+
+    if device_list:
+        show_device_list()
+        return
 
     keyboard = find_device(vid, pid, usage_page, usage_id)
     if keyboard:
@@ -132,4 +144,9 @@ def main(
 
 
 if __name__ == "__main__":
-    fire.Fire({"args": args, "config": config})
+    fire.Fire(
+        {
+            "args": args,
+            "config": config,
+        }
+    )
