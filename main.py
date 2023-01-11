@@ -5,7 +5,7 @@ https://www.reddit.com/r/olkb/comments/x00jyo/cannot_send_or_receive_data_with_r
 """
 import ctypes
 
-ctypes.CDLL(r"C:\Users\hxse\Downloads\hidapi-win\x64\hidapi.dll")
+ctypes.CDLL(r"D:\App\app\hidapi\hidapi-win\x64\hidapi.dll")
 
 import hid
 import time
