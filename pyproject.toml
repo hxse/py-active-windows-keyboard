@@ -2,6 +2,7 @@
 [tool.pdm.dev-dependencies]
 dev = [
     "black>=22.12.0",
+    "pylint>=2.15.10",
 ]
 
 [project]
@@ -14,6 +15,9 @@ authors = [
 dependencies = [
     "hid>=1.0.5",
     "fire>=0.5.0",
+    "pywin32>=305",
+    "psutil>=5.9.4",
+    "colorama>=0.4.6",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}

@@ -52,19 +52,19 @@ def find_device(vid, pid, usage_page, usage_id):
             return keyboard
 
 
-def send_device(sendList, keyboard):
+def send_device(sendList, keyboard, enable_received=None):
     message = pad_message(bytes(sendList))
     message = (
         b"\x00" + message[0 : EP_SIZE - 1]
     )  # 因为第0个比特会被 raw_hid_receive 吞掉,所以用第1个位置的比特
     print("sending:", message, len(message))
     keyboard.write(message)
-    print(f"reading... wait {sleepTime} second")
-    time.sleep(sleepTime)
-    received = keyboard.read(EP_SIZE)
-    print("received:", received, len(received))
+    if enable_received:
+        print(f"reading... wait {sleepTime} second")
+        time.sleep(sleepTime)
+        received = keyboard.read(EP_SIZE)
+        print("received:", received, len(received))
     keyboard.close()
-    print("device closed")
 
 
 def show_device_list():
@@ -89,6 +89,7 @@ def args(
     EP_SIZE=32,
     sleepTime=0.2,
     device_list=None,
+    enable_received=None,
 ):
     main(
         sendList,
@@ -100,11 +101,14 @@ def args(
         EP_SIZE,
         sleepTime,
         device_list,
+        enable_received,
     )
 
 
-def config(configPath, device_list=None):
+def config(configPath, sendList=None, device_list=None, enable_received=None):
     config = get_config(configPath)
+    if sendList:
+        config["sendList"] = sendList
     main(
         config["sendList"],
         config["vid"],
@@ -115,11 +119,21 @@ def config(configPath, device_list=None):
         config["EP_SIZE"],
         config["sleepTime"],
         device_list,
+        enable_received,
     )
 
 
 def main(
-    sendList, vid, pid, usage_page, usage_id, dllPath, _EP_SIZE, _sleepTime, device_list
+    sendList,
+    vid,
+    pid,
+    usage_page,
+    usage_id,
+    dllPath,
+    _EP_SIZE,
+    _sleepTime,
+    device_list,
+    enable_received,
 ):
 
     global hid, EP_SIZE, sleepTime
