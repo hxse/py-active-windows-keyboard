@@ -79,9 +79,9 @@ def main(path="config.json", sleepTime=0.3):
             if appFlag != _id:
                 print_info(f"漏网{'-'*20}", winTitle, winProcessExe, pid)
                 send = [1, 0]
-                if not layerFlag == 0:
+                if not layerFlag == send[1]:
                     send_hid_as_config("config.json", sendList=send)
-                    layerFlag = 0
+                    layerFlag = send[1]
                     print_send(1, layerFlag=layerFlag, send=send)
                 else:
                     print_send(0, layerFlag=layerFlag, send=send)
