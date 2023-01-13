@@ -17,7 +17,7 @@ dependencies = [
     "fire>=0.5.0",
     "pywin32>=305",
     "psutil>=5.9.4",
-    "colorama>=0.4.6",
+    "rich>=13.0.1",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}
