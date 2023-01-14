@@ -106,7 +106,7 @@ def get_config_rules(path):
         data = json.load(file)
         rules = data.get("rules")
         escapList = data.get("escapList")
-        ahk_file_name = data.get("ahk_file_name")
+        ahk_file_name = data.get("ahk_file_name", "keyboard_mapping.ahk")
         hidden_ahk_tray = data.get("hidden_ahk_tray", True)
         hidden_ahk_print = data.get("hidden_ahk_print", False)
         hidden_ahk_print_script = data.get("hidden_ahk_print_script", True)
