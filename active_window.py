@@ -7,6 +7,7 @@ import fire
 from rich.theme import Theme
 from rich.console import Console
 import subprocess
+import atexit
 
 t = Theme(
     {
@@ -18,6 +19,7 @@ t = Theme(
         "ahk_color_state_pause": "yellow",
         "ahk_color_state_exit": "red",
         "ahk_color_script": "#006eb1",
+        "ahk_color_skip": "#5f708b",
     }
 )
 
@@ -57,7 +59,7 @@ def print_skip(mode, winProcessName):
         )
 
 
-def print_ahk(mode, ahk_code_list, ahk_code_text=None):
+def print_ahk(mode, ahk_code_list=None, ahk_code_text=None):
     global hidden_ahk_print, hidden_ahk_print_script
     if mode == "info":
         if not hidden_ahk_print:
@@ -98,6 +100,8 @@ def print_ahk(mode, ahk_code_list, ahk_code_text=None):
                     console.print(
                         f"[ahk_color_state_run]run ahk script...[/ahk_color_state_run]\n[ahk_color_script]{ahk_code_text}[/ahk_color_script]"
                     )
+    if mode == "skip":
+        console.print("[ahk_color_skip]不必启动ahk[/ahk_color_skip]")
 
 
 def get_config_rules(path):
@@ -117,11 +121,14 @@ def get_config_rules(path):
     ]
 
 
-def run_ahk_script(ahk_file_name, ahk_code_list, skip_mapping):
+def run_ahk_script(ahk_file_name, ahk_code_list, skip_ahk):
     global ahkCodeFlag, hidden_ahk_tray, hidden_ahk_print, hidden_ahk_print_script
     print_ahk("info", ahk_code_list)
-    if skip_mapping or ahk_code_list == []:
+    if skip_ahk or ahk_code_list == []:
         ahk_code_list = ["Pause"]
+        if ahkCodeFlag == -1:
+            print_ahk("skip")
+            return
     if hidden_ahk_tray:
         if ahk_code_list[0] != "#NoTrayIcon":
             ahk_code_list.insert(0, "#NoTrayIcon")
@@ -145,16 +152,18 @@ def main(path="config.json", sleepTime=0.3):
         ahk_file_name,
     ] = get_config_rules(path)
 
-    import atexit
-
-    def exit_handler(ahk_file_name, ahk_code_list, skip_mapping):
-        run_ahk_script(ahk_file_name, ahk_code_list, skip_mapping)
-
-    atexit.register(exit_handler, ahk_file_name, ["exitApp"], False)
-
     appFlag = -1
     layerFlag = -1
     ahkCodeFlag = -1
+
+    def exit_handler(ahk_file_name, ahk_code_list, skip_ahk):
+        if ahkCodeFlag == -1:
+            print_ahk("skip")
+            return
+        run_ahk_script(ahk_file_name, ahk_code_list, skip_ahk)
+
+    atexit.register(exit_handler, ahk_file_name, ["exitApp"], False)
+
     with console.status(
         "[bold green] Wait Windows...", spinner="bouncingBall"
     ) as status:
@@ -197,7 +206,7 @@ def main(path="config.json", sleepTime=0.3):
                         run_ahk_script(
                             ahk_file_name,
                             ruleObj.get("ahk_code", []),
-                            ruleObj.get("skip_mapping"),
+                            ruleObj.get("skip_ahk"),
                         )
                         print("\n")
                         break
@@ -217,7 +226,7 @@ def main(path="config.json", sleepTime=0.3):
                     run_ahk_script(
                         ahk_file_name,
                         ruleObj.get("ahk_code", []),
-                        ruleObj.get("skip_mapping"),
+                        ruleObj.get("skip_ahk"),
                     )
                     print("\n")
 
