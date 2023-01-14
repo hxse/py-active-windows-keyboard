@@ -1,4 +1,5 @@
 config.json
+keyboard_mapping.ahk
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
