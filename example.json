@@ -1,0 +1,50 @@
+{
+    "kmk_config": {
+        "name": "piantor",
+        "port": "COM8",
+        "timeout": 3
+    },
+    "sendList": [
+        "switch_layer",
+        5
+    ],
+    "vid": 17876,
+    "pid": 2321,
+    "usage_page": 65376,
+    "usage_id": 97,
+    "dllPath": "D:\\App\\app\\hidapi\\hidapi-win\\x64\\hidapi.dll",
+    "EP_SIZE": 32,
+    "sleepTime": 0.2,
+    "escapList": [
+        "switch_layer",
+        1
+    ],
+    "ahk_file_name": "keyboard_mapping.ahk",
+    "hidden_ahk_tray": false,
+    "hidden_ahk_print": false,
+    "hidden_ahk_print_script": false,
+    "rules": [
+        {
+            "title": ".*记事本",
+            "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
+            "send": [
+                "switch_layer",
+                0
+            ],
+            "skip": true
+        },
+        {
+            "title": ".*- Notepad3",
+            "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
+            "send": [
+                "switch_layer",
+                0
+            ],
+            "skip": false,
+            "skip_ahk": true,
+            "ahk_code": [
+                "a::a"
+            ]
+        }
+    ]
+}

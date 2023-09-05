@@ -1,44 +1,9 @@
 # py-active-windows-keyboard
 # config.json
-```
-{
-  "sendList": [
-    1,
-    5
-  ],
-  "vid": 17876,
-  "pid": 2321,
-  "usage_page": 65376,
-  "usage_id": 97,
-  "dllPath": "D:\\App\\app\\hidapi\\hidapi-win\\x64\\hidapi.dll",
-  "EP_SIZE": 32,
-  "sleepTime": 0.2,
-  "escapList": [
-    1,
-    1
-  ],
-  "ahk_file_name": "keyboard_mapping.ahk",
-  "hidden_ahk_tray": true,
-  "hidden_ahk_print": false,
-  "hidden_ahk_print_script": false,
-  "rules": [
-  {
-    "title": ".*- Notepad3",
-    "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
-    "send": [
-      1,
-      0
-    ],
-    "skip": false,
-    "skip_mapping": false,
-    "ahk_code": [
-      "a::b",
-      "s::w"
-    ]
-  }
-}
-```
-# send_hid.py
+  * modify `example.json` to create `config.json`
+
+# QMK send hid
+  * qmk需要用hidapi,kmk不需要用这个
   * download, https://github.com/libusb/hidapi/releases
   * 方式一,通过配置文件
     * `pdm run python .\send_hid.py config ".\config.json"`
@@ -54,6 +19,9 @@
     * --device_list 1 这个参数可以打印找到devices的信息
     * vid,pid,可以在qmk方案中的info.json文件里找到
     * usage_page,usage_id,可以在qmk方案中的config.h文件里找到RAW_USAGE_PAGE,RAW_USAGE_ID,qmk中的方案默认是0xFF60,0x61
+# KMK send serial
+  * `python -m serial.tools.list_ports` on widnows run this code to find ports and write port in config.json
+  * run with kmk code https://github.com/hxse/piantor_kmk_firmware/blob/main/serialace2.py
 # active_window.py
   * `pdm run python .\active_window.py --path config.json`
   * title,process,支持正则表达式
