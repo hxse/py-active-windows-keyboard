@@ -19,7 +19,7 @@
     * --device_list 1 这个参数可以打印找到devices的信息
     * vid,pid,可以在qmk方案中的info.json文件里找到
     * usage_page,usage_id,可以在qmk方案中的config.h文件里找到RAW_USAGE_PAGE,RAW_USAGE_ID,qmk中的方案默认是0xFF60,0x61
-  * QMK example code  /example/air40_2023年07月19日.zip
+  * QMK example code  [qmk_code](/example/air40_2023年07月19日.zip)
 # KMK send serial
   * kmk不支持hidapi,不过支持serial,参考https://github.com/KMKfw/kmk_firmware/issues/869
   * `python -m serial.tools.list_ports` on widnows run this code to find ports and write port in config.json
