@@ -20,6 +20,7 @@
     * vid,pid,可以在qmk方案中的info.json文件里找到
     * usage_page,usage_id,可以在qmk方案中的config.h文件里找到RAW_USAGE_PAGE,RAW_USAGE_ID,qmk中的方案默认是0xFF60,0x61
 # KMK send serial
+  * kmk不支持hidapi,不过支持serial,参考https://github.com/KMKfw/kmk_firmware/issues/869
   * `python -m serial.tools.list_ports` on widnows run this code to find ports and write port in config.json
   * run with kmk code https://github.com/hxse/piantor_kmk_firmware/blob/main/serialace2.py
 # active_window.py
