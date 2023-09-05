@@ -7,6 +7,7 @@ import time
 import json
 import fire
 import ctypes
+from send_kmk import send_kmk
 
 
 def get_config(path):
@@ -27,6 +28,7 @@ def get_config(path):
             "sendList": config["sendList"],
             "sleepTime": config["sleepTime"],
             "dllPath": config["dllPath"],
+            "kmk_config": config["kmk_config"],
         }
 
 
@@ -53,11 +55,12 @@ def find_device(vid, pid, usage_page, usage_id):
 
 
 def send_device(sendList, keyboard, enable_received=None):
+    sendList = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
     message = pad_message(bytes(sendList))
     message = (
         b"\x00" + message[0 : EP_SIZE - 1]
     )  # 因为第0个比特会被 raw_hid_receive 吞掉,所以用第1个位置的比特
-    print("sending:", message, len(message))
+    print("sending_qmk:", message, len(message))
     keyboard.write(message)
     if enable_received:
         print(f"reading... wait {sleepTime} second")
@@ -120,6 +123,7 @@ def config(configPath, sendList=None, device_list=None, enable_received=None):
         config["sleepTime"],
         device_list,
         enable_received,
+        config["kmk_config"],
     )
 
 
@@ -134,8 +138,8 @@ def main(
     _sleepTime,
     device_list,
     enable_received,
+    kmk_config,
 ):
-
     global hid, EP_SIZE, sleepTime
     ctypes.CDLL(dllPath)
     import hid as _hid
@@ -155,6 +159,8 @@ def main(
         send_device(sendList, keyboard)
     else:
         print("Keyboard was not found.")
+    print("----------")
+    send_kmk(kmk_config, sendList)
 
 
 if __name__ == "__main__":
