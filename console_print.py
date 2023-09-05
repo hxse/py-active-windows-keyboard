@@ -31,7 +31,7 @@ def print_info(state, winTitle, winProcessExe, pid):
 def print_send(mode, layerFlag, send):
     if mode:
         console.print(
-            f"[bold green]{'-'*4}[/bold green][green]已成功发送 send: {send}[/green]"
+            f"[bold green]{'-'*4}[/bold green][green]未检测到重复,可以发送 send: {send}[/green]"
         )
     else:
         console.print(

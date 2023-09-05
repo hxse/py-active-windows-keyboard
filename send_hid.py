@@ -158,7 +158,9 @@ def main(
         print("Manufacturer:", keyboard.manufacturer)
         send_device(sendList, keyboard)
     else:
-        print("Keyboard was not found.")
+        print(
+            f"Keyboard was not found. qmk vid: {vid} pid: {pid} usage_page: {usage_page} usage_id:{usage_id}"
+        )
     print("----------")
     send_kmk(kmk_config, sendList)
 

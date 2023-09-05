@@ -15,8 +15,12 @@ def send_kmk(kmk_config, data):
         # ser.baudrate = 19200
         ser.port = kmk_config["port"]  # on windows example: COM8
         ser.timeout = kmk_config["timeout"]
+        try:
+            ser.open()
+        except serial.serialutil.SerialException as e:
+            print(f'Keyboard was not found. kmk port: {kmk_config["port"]}')
+            return
 
-        ser.open()
         send = b"keyboard.active_layers\n"
         send = b"keyboard.tap_key(KC.Y)\n"
         send = b"keyboard.tap_key(KC.TO(0))\n"
