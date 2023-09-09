@@ -1,17 +1,34 @@
 {
-    "kmk_config": {
-        "name": "piantor",
-        "port": "COM8",
-        "timeout": 3
-    },
+    "config_array": [
+        {
+            "name": "piantor",
+            "port": "COM8",
+            "timeout": 3,
+            "type": "kmk"
+        },
+        {
+            "name": "corne_config",
+            "vid": 18003,
+            "pid": 1,
+            "usage_page": 65376,
+            "usage_id": 97,
+            "timeout": 3,
+            "type": "qmk"
+        },
+        {
+            "name": "planck",
+            "vid": 17876,
+            "pid": 2321,
+            "usage_page": 65376,
+            "usage_id": 97,
+            "timeout": 3,
+            "type": "qmk"
+        }
+    ],
     "sendList": [
         "switch_layer",
         5
     ],
-    "vid": 17876,
-    "pid": 2321,
-    "usage_page": 65376,
-    "usage_id": 97,
     "dllPath": "D:\\App\\app\\hidapi\\hidapi-win\\x64\\hidapi.dll",
     "EP_SIZE": 32,
     "sleepTime": 0.2,
