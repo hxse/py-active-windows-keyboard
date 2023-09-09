@@ -13,23 +13,13 @@ from send_kmk import send_kmk
 def get_config(path):
     with open(path, "r", encoding="utf-8") as file:
         config = json.load(file)
-        for i in ["vid", "pid", "usage_page", "usage_id"]:
-            c = config[i]
-            if type(c) == str:
-                config[i] = int(c, 16)
-        return {
-            "EP_SIZE": config[
-                "EP_SIZE"
-            ],  # ATMEGA32U4通常需要32字节大小,超出会自动截断 #更新,好像不用这个也行,不确定
-            "vid": config["vid"],
-            "pid": config["pid"],
-            "usage_page": config["usage_page"],
-            "usage_id": config["usage_id"],
-            "sendList": config["sendList"],
-            "sleepTime": config["sleepTime"],
-            "dllPath": config["dllPath"],
-            "kmk_config": config["kmk_config"],
-        }
+        for c in config["config_array"]:
+            for i in ["vid", "pid", "usage_page", "usage_id"]:
+                if i in c:
+                    n = c[i]
+                    if type(n) == str:
+                        c[i] = int(n, 16)
+        return config
 
 
 def pad_message(payload: bytes) -> bytes:
@@ -82,63 +72,29 @@ def show_device_list():
         )
 
 
-def args(
-    sendList,
-    vid,
-    pid,
-    usage_page,
-    usage_id,
-    dllPath,
-    EP_SIZE=32,
-    sleepTime=0.2,
-    device_list=None,
-    enable_received=None,
-):
-    main(
-        sendList,
-        vid,
-        pid,
-        usage_page,
-        usage_id,
-        dllPath,
-        EP_SIZE,
-        sleepTime,
-        device_list,
-        enable_received,
-    )
-
-
 def config(configPath, sendList=None, device_list=None, enable_received=None):
     config = get_config(configPath)
     if sendList:
         config["sendList"] = sendList
     main(
+        config["config_array"],
         config["sendList"],
-        config["vid"],
-        config["pid"],
-        config["usage_page"],
-        config["usage_id"],
         config["dllPath"],
         config["EP_SIZE"],
         config["sleepTime"],
         device_list,
         enable_received,
-        config["kmk_config"],
     )
 
 
 def main(
+    config_array,
     sendList,
-    vid,
-    pid,
-    usage_page,
-    usage_id,
     dllPath,
     _EP_SIZE,
     _sleepTime,
     device_list,
     enable_received,
-    kmk_config,
 ):
     global hid, EP_SIZE, sleepTime
     ctypes.CDLL(dllPath)
@@ -152,23 +108,31 @@ def main(
         show_device_list()
         return
 
-    keyboard = find_device(vid, pid, usage_page, usage_id)
-    if keyboard:
-        print("Product:", keyboard.product)
-        print("Manufacturer:", keyboard.manufacturer)
-        send_device(sendList, keyboard)
-    else:
-        print(
-            f"Keyboard was not found. qmk vid: {vid} pid: {pid} usage_page: {usage_page} usage_id:{usage_id}"
-        )
-    print("----------")
-    send_kmk(kmk_config, sendList)
+    for c in config_array:
+        if c["type"] == "qmk":
+            keyboard = find_device(c["vid"], c["pid"], c["usage_page"], c["usage_id"])
+            if keyboard:
+                print(
+                    "---qmk---",
+                )
+                print(
+                    f"Product: {keyboard.product} vid: {c['vid']} pid: {c['pid']} usage_page: {c['usage_page']} usage_id: {c['usage_id']}",
+                )
+                send_device(sendList, keyboard)
+            else:
+                print("---qmk---")
+                print(
+                    "qmk keyboard was not found.",
+                    f"vid: {c['vid']} pid: {c['pid']} usage_page: {c['usage_page']} usage_id: {c['usage_id']}",
+                )
+        if c["type"] == "kmk":
+            print("---kmk---")
+            send_kmk(c, sendList)
+
+
+def show():
+    config("config.json", device_list=True)
 
 
 if __name__ == "__main__":
-    fire.Fire(
-        {
-            "args": args,
-            "config": config,
-        }
-    )
+    fire.Fire({"args": args, "config": config, "show": show})

@@ -18,7 +18,7 @@ def send_kmk(kmk_config, data):
         try:
             ser.open()
         except serial.serialutil.SerialException as e:
-            print(f'Keyboard was not found. kmk port: {kmk_config["port"]}')
+            print(f'kmk Keyboard was not found. port: {kmk_config["port"]}')
             return
 
         send = b"keyboard.active_layers\n"
@@ -28,8 +28,7 @@ def send_kmk(kmk_config, data):
         send = bytearray(
             f"{data[0]} {data[1]}\n", "utf-8"
         )  # 第一个是模式名字,后面参数,用空格,末尾带\n换行符
-        print(f'kmk_name: {kmk_config["name"]}')
-        print(f'kmk_port: {kmk_config["port"]}')
+        print(f'kmk_name: {kmk_config["name"]} kmk_port: {kmk_config["port"]}')
         print(f"send_kmk: {send}")
         ser.write(send)
         result = ser.readline()
