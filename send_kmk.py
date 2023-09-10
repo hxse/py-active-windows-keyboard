@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 import serial.tools.list_ports
+import time
 
 
 def show_device():
@@ -10,7 +11,7 @@ def show_device():
         print(f"device {k}", p.description, p.hwid)
 
 
-def send_kmk(kmk_config, data):
+def send_kmk(kmk_config, data, enable_received=False, sleepTime=0.3):
     with serial.Serial() as ser:
         # ser.baudrate = 19200
         ser.port = kmk_config["port"]  # on windows example: COM8
@@ -31,8 +32,11 @@ def send_kmk(kmk_config, data):
         print(f'kmk_name: {kmk_config["name"]} kmk_port: {kmk_config["port"]}')
         print(f"send_kmk: {send}")
         ser.write(send)
-        result = ser.readline()
-        print(f"result_kmk: {result}")
+        if enable_received:
+            print(f"reading... wait {sleepTime} second")
+            time.sleep(sleepTime)
+            result = ser.readline()
+            print(f"result_kmk: {result}")
 
 
 if __name__ == "__main__":

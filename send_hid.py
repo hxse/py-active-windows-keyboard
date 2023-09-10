@@ -44,7 +44,7 @@ def find_device(vid, pid, usage_page, usage_id):
             return keyboard
 
 
-def send_device(sendList, keyboard, c_type, enable_received=True):
+def send_device(sendList, keyboard, c_type, enable_received=False):
     sendList = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
     message = pad_message(bytes(sendList))
     prefix = (
@@ -53,7 +53,7 @@ def send_device(sendList, keyboard, c_type, enable_received=True):
     message = (
         prefix + message[0 : EP_SIZE - 1]
     )  # 因为第0个比特会被 raw_hid_receive 吞掉,所以用第1个位置的比特
-    print("sending_qmk:", message, len(message))
+    print(f"sending_{c_type}:", message, len(message))
     keyboard.write(message)
     if enable_received:
         print(f"reading... wait {sleepTime} second")
@@ -75,7 +75,7 @@ def show_device_list():
         )
 
 
-def config(configPath, sendList=None, device_list=None, enable_received=None):
+def config(configPath, sendList=None, device_list=None):
     config = get_config(configPath)
     if sendList:
         config["sendList"] = sendList
@@ -86,7 +86,7 @@ def config(configPath, sendList=None, device_list=None, enable_received=None):
         config["EP_SIZE"],
         config["sleepTime"],
         device_list,
-        enable_received,
+        config["enable_received"],
     )
 
 
@@ -97,7 +97,7 @@ def main(
     _EP_SIZE,
     _sleepTime,
     device_list,
-    enable_received,
+    enable_received=False,
 ):
     global hid, EP_SIZE, sleepTime
     ctypes.CDLL(dllPath)
@@ -119,7 +119,9 @@ def main(
                 print(
                     f"Product: {keyboard.product} vid: {c['vid']} pid: {c['pid']} usage_page: {c['usage_page']} usage_id: {c['usage_id']}",
                 )
-                send_device(sendList, keyboard, c["type"])
+                send_device(
+                    sendList, keyboard, c["type"], enable_received=enable_received
+                )
             else:
                 print(f"---{c['type']}---")
                 print(
@@ -128,7 +130,7 @@ def main(
                 )
         if c["type"] in ["kmk"]:
             print(f"---{c['type']}---")
-            send_kmk(c, sendList)
+            send_kmk(c, sendList, enable_received=enable_received, sleepTime=sleepTime)
 
 
 def show():
