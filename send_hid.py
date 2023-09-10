@@ -44,11 +44,14 @@ def find_device(vid, pid, usage_page, usage_id):
             return keyboard
 
 
-def send_device(sendList, keyboard, enable_received=None):
+def send_device(sendList, keyboard, c_type, enable_received=True):
     sendList = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
     message = pad_message(bytes(sendList))
+    prefix = (
+        b"\x1e" + b"\x1e" if c_type in ["via", "vial"] else b"\x1e"
+    )  # vial还会多用掉一个位置, https://github.com/vial-kb/vial-qmk/issues/538
     message = (
-        b"\x00" + message[0 : EP_SIZE - 1]
+        prefix + message[0 : EP_SIZE - 1]
     )  # 因为第0个比特会被 raw_hid_receive 吞掉,所以用第1个位置的比特
     print("sending_qmk:", message, len(message))
     keyboard.write(message)
@@ -109,24 +112,22 @@ def main(
         return
 
     for c in config_array:
-        if c["type"] == "qmk":
+        if c["type"] in ["qmk", "via", "vial"]:
             keyboard = find_device(c["vid"], c["pid"], c["usage_page"], c["usage_id"])
             if keyboard:
-                print(
-                    "---qmk---",
-                )
+                print(f"---{c['type']}---")
                 print(
                     f"Product: {keyboard.product} vid: {c['vid']} pid: {c['pid']} usage_page: {c['usage_page']} usage_id: {c['usage_id']}",
                 )
-                send_device(sendList, keyboard)
+                send_device(sendList, keyboard, c["type"])
             else:
-                print("---qmk---")
+                print(f"---{c['type']}---")
                 print(
                     "qmk keyboard was not found.",
                     f"vid: {c['vid']} pid: {c['pid']} usage_page: {c['usage_page']} usage_id: {c['usage_id']}",
                 )
-        if c["type"] == "kmk":
-            print("---kmk---")
+        if c["type"] in ["kmk"]:
+            print(f"---{c['type']}---")
             send_kmk(c, sendList)
 
 
@@ -135,4 +136,4 @@ def show():
 
 
 if __name__ == "__main__":
-    fire.Fire({"args": args, "config": config, "show": show})
+    fire.Fire({"config": config, "show": show})

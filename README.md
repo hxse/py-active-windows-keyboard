@@ -1,7 +1,7 @@
 # py-active-windows-keyboard
 # config.json
   * modify `example.json` to create `config.json`
-
+  * type要填准确,因为会根据不同的类型发送不同的数据,type选项如: qmk,vial,kmk
 # QMK send hid
   * qmk需要用hidapi,kmk不需要用这个
   * download, https://github.com/libusb/hidapi/releases

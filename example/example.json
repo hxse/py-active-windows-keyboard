@@ -13,7 +13,7 @@
             "usage_page": 65376,
             "usage_id": 97,
             "timeout": 3,
-            "type": "qmk"
+            "type": "vial"
         },
         {
             "name": "planck",
@@ -41,15 +41,6 @@
     "hidden_ahk_print": false,
     "hidden_ahk_print_script": false,
     "rules": [
-        {
-            "title": ".*记事本",
-            "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
-            "send": [
-                "switch_layer",
-                0
-            ],
-            "skip": true
-        },
         {
             "title": ".*- Notepad3",
             "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
