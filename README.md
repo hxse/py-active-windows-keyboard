@@ -36,3 +36,6 @@
   * hidden_ahk_print_script,是否打印详细脚本内容,可以不填,默认为true,打印,如果hidden_ahk_print为false,则不打印
   * skip_mapping是否跳过ahk的键盘映射,true则跳过脚本
   * ahk_code,就是ahk命令,数组中每个元素一行
+# keymap
+  * https://github.com/hxse/keyboard_firmware
+  * https://github.com/hxse/piantor_kmk_firmware
