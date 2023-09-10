@@ -1,12 +1,6 @@
 {
     "config_array": [
         {
-            "name": "piantor",
-            "port": "COM8",
-            "timeout": 3,
-            "type": "kmk"
-        },
-        {
             "name": "corne_config",
             "vid": 18003,
             "pid": 1,
@@ -14,6 +8,12 @@
             "usage_id": 97,
             "timeout": 3,
             "type": "vial"
+        },
+        {
+            "name": "piantor",
+            "port": "COM8",
+            "timeout": 3,
+            "type": "kmk"
         },
         {
             "name": "planck",
