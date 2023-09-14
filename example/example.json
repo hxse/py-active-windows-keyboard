@@ -53,7 +53,7 @@
             "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
             "send": [
                 "switch_layer",
-                0
+                1
             ],
             "skip": false,
             "skip_ahk": true,
