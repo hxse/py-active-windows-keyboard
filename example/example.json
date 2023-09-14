@@ -62,13 +62,13 @@
             ]
         },
         {
-            "title": ".*记事本",
+            "title": ".* - Notepad",
             "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
             "send": [
                 "switch_layer",
                 0
             ],
-            "skip": true
+            "skip": false
         }
     ]
 }
