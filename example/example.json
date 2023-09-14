@@ -1,13 +1,19 @@
 {
     "config_array": [
         {
-            "name": "corne_config",
+            "name": "corne_qmk",
             "vid": 18003,
             "pid": 1,
             "usage_page": 65376,
             "usage_id": 97,
             "timeout": 3,
             "type": "vial"
+        },
+        {
+            "name": "corne_kmk",
+            "port": "COM9",
+            "timeout": 3,
+            "type": "kmk"
         },
         {
             "name": "piantor",
@@ -52,8 +58,17 @@
             "skip": false,
             "skip_ahk": true,
             "ahk_code": [
-                "a::a"
+                "a::b"
             ]
+        },
+        {
+            "title": ".*记事本",
+            "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
+            "send": [
+                "switch_layer",
+                0
+            ],
+            "skip": true
         }
     ]
 }
