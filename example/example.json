@@ -72,9 +72,9 @@
                 "switch_layer",
                 0,
                 "set_hsv",
-                160,
-                139,
-                20
+                175,
+                155,
+                23
             ],
             "skip": false
         }
