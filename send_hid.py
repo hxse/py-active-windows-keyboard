@@ -45,8 +45,18 @@ def find_device(vid, pid, usage_page, usage_id):
 
 
 def send_device(sendList, keyboard, c_type, enable_received=False):
-    sendList = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
-    message = pad_message(bytes(sendList))
+    sendList1 = []
+    sendList2 = []
+    if len(sendList) > 0:
+        sendList1 = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
+    if len(sendList) > 2:
+        sendList2 = [
+            1 if sendList[2] == "set_hsv" else 0,
+            sendList[3],
+            sendList[4],
+            sendList[5],
+        ]
+    message = pad_message(bytes(sendList1 + sendList2))
     prefix = (
         b"\x1e" + b"\x1e" if c_type in ["via", "vial"] else b"\x1e"
     )  # vial还会多用掉一个位置, https://github.com/vial-kb/vial-qmk/issues/538

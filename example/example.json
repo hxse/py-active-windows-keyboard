@@ -53,9 +53,13 @@
             "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
             "send": [
                 "switch_layer",
-                1
+                0,
+                "set_hsv",
+                170,
+                169,
+                20
             ],
-            "skip": false,
+            "skip": true,
             "skip_ahk": true,
             "ahk_code": [
                 "a::b"
@@ -66,9 +70,35 @@
             "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
             "send": [
                 "switch_layer",
-                0
+                0,
+                "set_hsv",
+                170,
+                169,
+                20
             ],
             "skip": false
+        },
+        {
+            "title": ".*",
+            "process": "C:\\Windows\\explorer.exe",
+            "send": [
+                "switch_layer",
+                1
+            ],
+            "skip": true
+        },
+        {
+            "title": ".*",
+            "process": ".*WindowsTerminal.exe",
+            "send": [
+                "switch_layer",
+                1
+            ],
+            "skip": true,
+            "skip_ahk": true,
+            "ahk_code": [
+                "pause"
+            ]
         }
     ]
 }
