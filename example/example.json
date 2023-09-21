@@ -11,7 +11,7 @@
         },
         {
             "name": "corne_kmk",
-            "port": "COM9",
+            "port": "COM15",
             "timeout": 3,
             "type": "kmk"
         },
@@ -72,9 +72,9 @@
                 "switch_layer",
                 0,
                 "set_hsv",
-                172,
-                223,
-                23
+                170,
+                185,
+                30
             ],
             "skip": false
         }
