@@ -27,7 +27,7 @@ def send_kmk(kmk_config, data, enable_received=False, sleepTime=0.3):
         send = b"keyboard.tap_key(KC.TO(0))\n"
         # send = b"keyboard.tap_key(KC.TO(1))\n"
         send = bytearray(
-            f"{ ' '.join([str(i)for i in data])}\n", "utf-8"
+            f"{ ' '.join([str(i) for i in data])}\n", "utf-8"
         )  # 第一个是模式名字,后面参数,用空格,末尾带\n换行符
         print(f'kmk_name: {kmk_config["name"]} kmk_port: {kmk_config["port"]}')
         print(f"send_kmk: {send}")
