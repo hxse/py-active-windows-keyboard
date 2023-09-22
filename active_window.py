@@ -7,6 +7,7 @@ import fire
 import subprocess
 import atexit
 import console_print
+import pathlib
 
 from console_print import (
     console,
@@ -58,13 +59,29 @@ def run_ahk_script(ahk_file_name, ahk_code_list, skip_ahk):
     ahkCodeFlag = ahk_code_text
 
 
+last_st_mtime = 0
+
+
+def check_modify_load_config(path):
+    global last_st_mtime
+    file = pathlib.Path(path)
+    assert file.exists(), f"No such file: {file}"  # check that the file exists
+    st_mtime = file.stat().st_mtime
+    if st_mtime == last_st_mtime:
+        return
+    last_st_mtime = st_mtime
+
+    start_time = time.time_ns() // 1000000  # flooring last digit (1ms digit)
+    [rules, escapList, ahk_file_name] = get_config_rules(path)
+    end_time = time.time_ns() // 1000000  # flooring last digit (1ms digit)
+    print(f"json config load: {end_time-start_time} ms")
+    return [rules, escapList, ahk_file_name]
+
+
 def main(path="config.json", sleepTime=0.3):
     global ahkCodeFlag, hidden_ahk_tray, hidden_ahk_print, hidden_ahk_print_script
-    [
-        rules,
-        escapList,
-        ahk_file_name,
-    ] = get_config_rules(path)
+
+    [rules, escapList, ahk_file_name] = check_modify_load_config(path)
 
     console_print.hidden_ahk_print = hidden_ahk_print
     console_print.hidden_ahk_print_script = hidden_ahk_print_script
@@ -86,6 +103,13 @@ def main(path="config.json", sleepTime=0.3):
     ) as status:
         while 1:
             time.sleep(sleepTime)
+
+            res = check_modify_load_config(path)
+            if res != None:
+                appFlag = -1
+                layerFlag = -1
+                [rules, escapList, ahk_file_name] = res
+
             window = win32gui.GetForegroundWindow()
             tid, pid = win32process.GetWindowThreadProcessId(window)
             winTitle = win32gui.GetWindowText(window)
