@@ -31,33 +31,74 @@
             "type": "qmk"
         }
     ],
-    "sendList": [
-        "switch_layer",
-        5
-    ],
+    "sendList": [],
     "dllPath": "D:\\App\\app\\hidapi\\hidapi-win\\x64\\hidapi.dll",
     "EP_SIZE": 32,
     "sleepTime": 0.3,
     "escapList": [
         "switch_layer",
-        1
+        1,
+        "set_hsv_7",
+        "$hsv_7"
     ],
     "ahk_file_name": "keyboard_mapping.ahk",
     "hidden_ahk_tray": false,
     "hidden_ahk_print": false,
     "hidden_ahk_print_script": false,
     "enable_received": false,
+    "values": {
+        "$hsv_1": [
+            [
+                160,
+                185,
+                35
+            ]
+        ],
+        "$hsv_7": [
+            [
+                130,
+                185,
+                35
+            ],
+            [
+                245,
+                204,
+                37
+            ],
+            [
+                127,
+                160,
+                16
+            ],
+            [
+                127,
+                160,
+                16
+            ],
+            [
+                5,
+                190,
+                60
+            ],
+            [
+                5,
+                190,
+                60
+            ],
+            [
+                70,
+                180,
+                28
+            ]
+        ]
+    },
     "rules": [
         {
             "title": ".*- Notepad3",
             "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
             "send": [
                 "#switch_layer",
-                0,
-                "#set_hsv",
-                170,
-                169,
-                20
+                0
             ],
             "skip": true,
             "skip_ahk": true,
@@ -71,10 +112,8 @@
             "send": [
                 "switch_layer",
                 0,
-                "set_hsv",
-                170,
-                185,
-                30
+                "set_hsv_1",
+                "$hsv_1"
             ],
             "skip": false
         }
