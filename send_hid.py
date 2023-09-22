@@ -50,12 +50,12 @@ def send_device(sendList, keyboard, c_type, enable_received=False):
     if len(sendList) > 0:
         sendList1 = [1 if sendList[0] == "switch_layer" else 0, sendList[1]]
     if len(sendList) > 2:
-        sendList2 = [
-            1 if sendList[2] == "set_hsv" else 0,
-            sendList[3],
-            sendList[4],
-            sendList[5],
-        ]
+        if sendList[2].startswith("set_hsv"):
+            num = int(sendList[2].rsplit("_", 1)[1])
+            sendList2 = [num]
+            for i in sendList[3]:
+                for v in i:
+                    sendList2.append(v)
     message = pad_message(bytes(sendList1 + sendList2))
     prefix = (
         b"\x1e" + b"\x1e" if c_type in ["via", "vial"] else b"\x1e"
@@ -85,10 +85,23 @@ def show_device_list():
         )
 
 
+def replace_value(config):
+    for i in ["sendList", "escapList"]:
+        for k, v in enumerate(config[i]):
+            if str(v).startswith("$"):
+                config[i][k] = config["values"][v]
+    for obj in config["rules"]:
+        for k, v in enumerate(obj["send"]):
+            if str(v).startswith("$"):
+                obj["send"][k] = config["values"][v]
+    return config
+
+
 def config(configPath, sendList=None, device_list=None):
     config = get_config(configPath)
     if sendList:
         config["sendList"] = sendList
+    config = replace_value(config)
     main(
         config["config_array"],
         config["sendList"],
