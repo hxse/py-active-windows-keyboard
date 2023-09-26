@@ -35,11 +35,16 @@
     "dllPath": "D:\\App\\app\\hidapi\\hidapi-win\\x64\\hidapi.dll",
     "EP_SIZE": 32,
     "sleepTime": 0.3,
+    "skip_escapList": false,
     "escapList": [
         "switch_layer",
         1,
         "set_hsv_7",
         "$hsv_7"
+    ],
+    "skip_escapList_ahk": true,
+    "escapList_ahk": [
+        "a::b"
     ],
     "ahk_file_name": "keyboard_mapping.ahk",
     "hidden_ahk_tray": false,
@@ -103,26 +108,30 @@
         {
             "title": ".*Notepad3",
             "process": ".*\\scoop\\apps\\notepad3\\.*\\Notepad3.exe",
+            "skip": true,
             "send": [
                 "#switch_layer",
                 0
             ],
-            "skip": true,
             "skip_ahk": true,
             "ahk_code": [
-                "a::b"
+                "a::d"
             ]
         },
         {
             "title": ".*(Notepad|记事本)",
             "process": "C:\\Program Files\\WindowsApps\\Microsoft.WindowsNotepad.*\\Notepad\\Notepad.exe",
+            "skip": false,
             "send": [
                 "switch_layer",
                 0,
                 "set_hsv_1",
                 "$hsv_1"
             ],
-            "skip": false
+            "skip_ahk": false,
+            "ahk_code": [
+                "Alt::Shift"
+            ]
         }
     ]
 }

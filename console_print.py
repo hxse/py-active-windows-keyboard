@@ -47,9 +47,13 @@ def print_error(mode, winTitle, tid, pid, e):
 
 
 def print_skip(mode, winProcessName):
-    if mode == "matchSkip":
+    if mode == "matchSkip_catch":
         console.print(
-            f"[skip_color]skip ==> match winProcessName: {winProcessName}[/skip_color]"
+            f"[skip_color]skip catch ==> match winProcessName: {winProcessName}[/skip_color]"
+        )
+    if mode == "matchSkip_escap":
+        console.print(
+            f"[skip_color]skip escap ==> match winProcessName: {winProcessName}[/skip_color]"
         )
 
 
