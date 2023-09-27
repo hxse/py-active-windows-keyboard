@@ -163,7 +163,9 @@ def main(path="config.json", sleepTime=0.3):
             sendFlag = False
             for ruleObj in rules:
                 titleRegex = re.compile(ruleObj["title"].replace("\\", "\\\\"))
-                titleMatch = titleRegex.match(winTitle)
+                titleMatch = titleRegex.match(winTitle) or titleRegex.match(
+                    winTitle.replace("\u200b", "")
+                )
                 processRegex = re.compile(ruleObj["process"].replace("\\", "\\\\"))
                 processMatch = processRegex.match(winProcessExe)
                 if titleMatch and processMatch:
