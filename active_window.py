@@ -44,24 +44,32 @@ def get_config_rules(path):
 
 def run_ahk_script(ahk_file_name, ahk_code_list, skip_ahk):
     global ahkCodeFlag, hidden_ahk_tray, hidden_ahk_print, hidden_ahk_print_script
-    print_ahk("info", ahk_code_list)
-    if skip_ahk or ahk_code_list == []:
-        ahk_code_list = ["Pause"]
-        if ahkCodeFlag == -1:
-            print_ahk("skip")
-            return
-    if hidden_ahk_tray:
-        if ahk_code_list[0] != "#NoTrayIcon":
-            ahk_code_list.insert(0, "#NoTrayIcon")
-    ahk_code_text = "\n".join(ahk_code_list)
-    if ahk_code_text == ahkCodeFlag:
-        print_ahk("repeat", ahk_code_list, ahk_code_text)
-    else:
+    if isinstance(ahk_code_list, str):
+        with open(ahk_code_list, "r", encoding="utf8") as f:
+            ahk_code_text = f.read()
         with open(ahk_file_name, "w", encoding="utf8") as f:
             f.write(ahk_code_text)
-        print_ahk("script", ahk_code_list, ahk_code_text)
-
+        print_ahk("script:", ahk_code_list, ahk_code_text)
         subprocess.Popen(["autohotkey", "/restart", ahk_file_name])
+
+    if isinstance(ahk_code_list, list):
+        print_ahk("info", ahk_code_list)
+        if skip_ahk or ahk_code_list == []:
+            ahk_code_list = ["Pause"]
+            if ahkCodeFlag == -1:
+                print_ahk("skip")
+                return
+        if hidden_ahk_tray:
+            if ahk_code_list[0] != "#NoTrayIcon":
+                ahk_code_list.insert(0, "#NoTrayIcon")
+        ahk_code_text = "\n".join(ahk_code_list)
+        if ahk_code_text == ahkCodeFlag:
+            print_ahk("repeat", ahk_code_list, ahk_code_text)
+        else:
+            with open(ahk_file_name, "w", encoding="utf8") as f:
+                f.write(ahk_code_text)
+            print_ahk("script", ahk_code_list, ahk_code_text)
+            subprocess.Popen(["autohotkey", "/restart", ahk_file_name])
     ahkCodeFlag = ahk_code_text
 
 
@@ -98,7 +106,7 @@ def check_modify_load_config(path):
     ]
 
 
-def main(path="config.json", sleepTime=0.3):
+def main(path="config/config.json", sleepTime=0.3):
     global ahkCodeFlag, hidden_ahk_tray, hidden_ahk_print, hidden_ahk_print_script
 
     [
@@ -178,7 +186,7 @@ def main(path="config.json", sleepTime=0.3):
                             continue
                         print_info(f"----捕获", winTitle, winProcessExe, pid)
                         if not layerFlag == ruleObj["send"][1]:
-                            send_hid_as_config("config.json", sendList=ruleObj["send"])
+                            send_hid_as_config(path, sendList=ruleObj["send"])
                             layerFlag = ruleObj["send"][1]
                             print_send(1, layerFlag=layerFlag, send=ruleObj["send"])
                         else:
@@ -198,7 +206,7 @@ def main(path="config.json", sleepTime=0.3):
                     print_info(f"----漏网", winTitle, winProcessExe, pid)
 
                     if not layerFlag == escapList[1]:
-                        send_hid_as_config("config.json", sendList=escapList)
+                        send_hid_as_config(path, sendList=escapList)
                         layerFlag = escapList[1]
                         print_send(1, layerFlag=layerFlag, send=escapList)
                     else:
